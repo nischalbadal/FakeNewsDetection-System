@@ -6,13 +6,24 @@
     </title>
   </head>
   <body>
-    <form action="/external/" method="post">
-      {% csrf_token %} Enter News Body to check
-      <input type="text" name="news" required /> <br /><br />
-      <br /><br />
-      {{data1}}
-      <br /><br />
+    <form action="/index/" method="post">
+      {% csrf_token %} Enter News to check:<br />
+      <input
+        type="text"
+        name="news"
+        required
+        style="width: 500px; height: 100px;"
+      /><br /><br />
       <button type="submit" name="run_script">CHECK NEWS</button>
+      <br /><br />
+      The News you entered is "{{data0}}"
+      <br /><br />
+      The Result of the above news is {{data1}}
+      <br /><br />
+      The Accuracy Obtained from Confusion Matrix is {{data2}}. <br />i.e.
+      {{percentage}}% accurate.
+
+      <br /><br />
     </form>
   </body>
 </html>
