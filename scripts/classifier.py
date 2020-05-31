@@ -10,7 +10,6 @@ from sklearn.pipeline import Pipeline
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.linear_model import  LogisticRegression
 from sklearn.linear_model import PassiveAggressiveClassifier
-from sklearn.linear_model import SGDClassifier
 from sklearn import svm
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import KFold
@@ -59,6 +58,15 @@ svm_pipeline.fit(DataPrep.train_news['Statement'],DataPrep.train_news['Label'])
 predicted_svm = svm_pipeline.predict(DataPrep.test_news['Statement'])
 np.mean(predicted_svm == DataPrep.test_news['Label'])
 
+#using Passive Aggressive Classifier
+passive_pipeline = Pipeline([
+        ('svm2CV',FeatureSelection.countV),
+        ('svm2_clf',PassiveAggressiveClassifier(loss='hinge',C=1.0, n_iter=5))
+        ])
+
+passive_pipeline.fit(DataPrep.train_news['Statement'],DataPrep.train_news['Label'])
+predicted_passive = passive_pipeline.predict(DataPrep.test_news['Statement'])
+np.mean(predicted_passive == DataPrep.test_news['Label'])
 
 #using SVM Stochastic Gradient Descent on hinge loss
 sgd_pipeline = Pipeline([
@@ -113,7 +121,7 @@ def build_confusion_matrix(classifier):
 build_confusion_matrix(nb_pipeline)
 build_confusion_matrix(logR_pipeline)
 build_confusion_matrix(svm_pipeline)
-build_confusion_matrix(sgd_pipeline)
+build_confusion_matrix(passive_pipeline)
 build_confusion_matrix(random_forest)
 
 
@@ -155,15 +163,15 @@ predicted_svm_ngram = svm_pipeline_ngram.predict(DataPrep.test_news['Statement']
 np.mean(predicted_svm_ngram == DataPrep.test_news['Label'])
 
 
-#sgd classifier
-sgd_pipeline_ngram = Pipeline([
-         ('sgd_tfidf',FeatureSelection.tfidf_ngram),
-         ('sgd_clf',SGDClassifier(loss='hinge', penalty='l2', alpha=1e-3, n_iter=5))
+#passive classifier
+pasive_pipeline_ngram = Pipeline([
+         ('passive_tfidf',FeatureSelection.tfidf_ngram),
+         ('passive_clf',PassiveAggressiveClassifier(loss='hinge',C=1.0, n_iter=5))
          ])
 
-sgd_pipeline_ngram.fit(DataPrep.train_news['Statement'],DataPrep.train_news['Label'])
-predicted_sgd_ngram = sgd_pipeline_ngram.predict(DataPrep.test_news['Statement'])
-np.mean(predicted_sgd_ngram == DataPrep.test_news['Label'])
+passive_pipeline_ngram.fit(DataPrep.train_news['Statement'],DataPrep.train_news['Label'])
+predicted_passive_ngram = passive_pipeline_ngram.predict(DataPrep.test_news['Statement'])
+np.mean(predicted_passive_ngram == DataPrep.test_news['Label'])
 
 
 #random forest classifier
@@ -181,7 +189,7 @@ np.mean(predicted_rf_ngram == DataPrep.test_news['Label'])
 build_confusion_matrix(nb_pipeline_ngram)
 build_confusion_matrix(logR_pipeline_ngram)
 build_confusion_matrix(svm_pipeline_ngram)
-build_confusion_matrix(sgd_pipeline_ngram)
+build_confusion_matrix(passive_pipeline_ngram)
 build_confusion_matrix(random_forest_ngram)
 
 
@@ -189,7 +197,7 @@ build_confusion_matrix(random_forest_ngram)
 print(classification_report(DataPrep.test_news['Label'], predicted_nb_ngram))
 print(classification_report(DataPrep.test_news['Label'], predicted_LogR_ngram))
 print(classification_report(DataPrep.test_news['Label'], predicted_svm_ngram))
-print(classification_report(DataPrep.test_news['Label'], predicted_sgd_ngram))
+print(classification_report(DataPrep.test_news['Label'], predicted_passive_ngram))
 print(classification_report(DataPrep.test_news['Label'], predicted_rf_ngram))
 
 DataPrep.test_news['Label'].shape
@@ -326,7 +334,7 @@ def plot_learing_curve(pipeline,title):
 plot_learing_curve(logR_pipeline_ngram,"Naive-bayes Classifier")
 plot_learing_curve(nb_pipeline_ngram,"LogisticRegression Classifier")
 plot_learing_curve(svm_pipeline_ngram,"SVM Classifier")
-plot_learing_curve(sgd_pipeline_ngram,"SGD Classifier")
+plot_learing_curve(passive_pipeline_ngram,"Passive Aggressive Classifier")
 plot_learing_curve(random_forest_ngram,"RandomForest Classifier")
 
 """
@@ -417,4 +425,4 @@ def show_most_informative_features(model, vect, clf, text=None, n=50):
 show_most_informative_features(logR_pipeline_ngram,vect='LogR_tfidf',clf='LogR_clf')
 show_most_informative_features(nb_pipeline_ngram,vect='nb_tfidf',clf='nb_clf')
 show_most_informative_features(svm_pipeline_ngram,vect='svm_tfidf',clf='svm_clf')
-show_most_informative_features(sgd_pipeline_ngram,vect='sgd_tfidf',clf='sgd_clf')
+show_most_informative_features(passive_pipeline_ngram,vect='passive_tfidf',clf='passive_clf')

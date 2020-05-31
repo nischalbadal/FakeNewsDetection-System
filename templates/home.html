@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Fake News Detector
+    </title>
+  </head>
+  <body>
+    <form action="/external/" method="post">
+      {% csrf_token %} Enter News Body to check
+      <input type="text" name="news" required /> <br /><br />
+      <br /><br />
+      {{data1}}
+      <br /><br />
+      <button type="submit" name="run_script">CHECK NEWS</button>
+    </form>
+  </body>
+</html>

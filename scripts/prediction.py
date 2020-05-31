@@ -1,8 +1,8 @@
 import pickle
 
-var = input("Please enter the news text you want to verify: ")
-print("You entered: " + str(var))
-
+# var = input("Please enter the news text you want to verify: ")
+# print("You entered: " + str(var))
+# var=str(data1)
 
 #function to run for prediction
 def detecting_fake_news(var):    
